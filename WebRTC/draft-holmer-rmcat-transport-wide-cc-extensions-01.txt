@@ -530,6 +530,7 @@ Internet-Draft            trnsprt-wide-cc-exts              October 2015
       
       如果已在状态列表中添加了“数据包已接收，小增量”符号，会将8位无符号接收增量附加
       到recv增量列表中，表示在[0，63.75]ms 范围内的增量。
+      [0，63.75]ms = [0, 63750]us = [0, 255]*250us
 
    o  If the "Packet received, large or negative delta" symbol has been
       appended to the status list, a 16-bit signed receive delta will be
@@ -539,6 +540,7 @@ Internet-Draft            trnsprt-wide-cc-exts              October 2015
       如果已在状态列表中添加了“数据包已接收，大或负增量”符号，则将在
       recv增量列表中附加一个16位带符号的接收增量，表示增量在
       [-8192.0，8191.75] ms内。
+      [-8192.0, 8191.75]ms = [-8192000, 8191750]us = [-32768, 32767]*250us
 
    o  If the delta exceeds even the larger limits, a new feedback
       message must be used, where the 24-bit base receive delta can
@@ -570,11 +572,13 @@ Internet-Draft            trnsprt-wide-cc-exts              October 2015
    较小的接收增量上限63.75ms表示这是
    仅在约1000 / 25.5〜= 16个数据包/s 及以上时才可行。
    包大小为1200字节/包，相当约150 kbit / s。
+   63750=255*250 1byte范围0~255，此时delta可以用1byte存储
 
    The 0.25 ms resolution means that up to 4000 packets per second can
    be represented.  With a 1200 bytes/packet payload, that amounts to
    38.4 Mbit/s payload bandwidth.
    0.25毫秒的分辨率意味着每秒最多4000个数据包。1200字节/数据包等于38.4 Mbit / s的带宽。
+   此时delta需要2byte存储
 
 4.  Overhead discussion
 
